@@ -4,7 +4,7 @@
  * @Author: 王鹏
  * @Date: 2022-04-08 23:05:36
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-17 10:21:09
+ * @LastEditTime: 2022-10-21 10:53:19
  */
 'use strict';
 
@@ -110,7 +110,9 @@ class LoginController extends Controller {
         uid: md5(`${new Date()}${username}`),
       });
 
-      if (data) {
+      if (data.code === 305) {
+        ctx.body = data;
+      } else if (data) {
         ctx.body = {
           code: 200,
           data,

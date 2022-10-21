@@ -4,7 +4,7 @@
  * @Author: 王鹏
  * @Date: 2022-04-09 16:18:28
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-17 12:14:14
+ * @LastEditTime: 2022-10-21 10:51:45
  */
 'use strict';
 
@@ -62,9 +62,17 @@ class UserService extends Service {
   }
   // 注册用户
   async createUser(obj) {
+    const userItem = await this.app.mysql.get('admin', { username: obj.username });
+
+    if (userItem) {
+      return {
+        code: 305,
+        msg: '该用户已存在',
+      };
+    }
+
     const result = await this.app.mysql.insert('admin', obj);
     if (result.affectedRows === 1) {
-      console.log(result);
       await this.app.mysql.insert('admin_role', {
         aid: obj.uid,
         rid: 3,

@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-07-06 11:39:35
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-21 10:21:55
+ * @LastEditTime: 2022-10-21 11:26:29
  */
 'use strict';
 
@@ -17,35 +17,33 @@ class UserController extends Controller {
     // 解构参数
     const { keyword } = ctx.request.query;
 
-    await this.service.redis
-      .get('userList_search')
-      .then(async data => {
-        if (data) {
+    await this.service.redis.get('userList_search').then(async data => {
+      if (data) {
+        ctx.body = {
+          code: 200,
+          msg: '获取用户列表成功',
+          ...data,
+        };
+        return;
+      }
+      await this.service.user
+        ._searchUserList(keyword)
+        .then(data => {
+          this.service.redis.set('userList_search', data);
           ctx.body = {
             code: 200,
             msg: '获取用户列表成功',
-            ...data,
+            data,
           };
-          return;
-        }
-        await this.service.user
-          ._searchUserList(keyword)
-          .then(data => {
-            this.service.redis.set('userList_search', data);
-            ctx.body = {
-              code: 200,
-              msg: '获取用户列表成功',
-              data,
-            };
-          })
-          .catch(e => {
-            ctx.body = {
-              code: 300,
-              msg: '获取用户列表失败',
-            };
-            console.log(e);
-          });
-      });
+        })
+        .catch(e => {
+          ctx.body = {
+            code: 300,
+            msg: '获取用户列表失败',
+          };
+          console.log(e);
+        });
+    });
   }
   // 获取用户列表
   async getUserList() {
@@ -120,6 +118,16 @@ class UserController extends Controller {
         return;
       }
 
+      const { data } = this.ctx.session.userInfo;
+      if (uid === data.uid) {
+        ctx.body = {
+          code: 305,
+          msg: '不能修改自己的状态，请联系管理员操作',
+          // data: e,
+        };
+        return;
+      }
+
       const isEdit = await ctx.service.user._putUserToExamine({
         uid,
         state,
@@ -161,12 +169,22 @@ class UserController extends Controller {
     }
 
     try {
-      const isAuth = await this.service.auth.isAuth('edit@user');
+      const isAuth = await this.service.auth.isAuth('setting@admin');
 
       if (!isAuth) {
         ctx.body = {
           code: 305,
           msg: '您暂无该权限，请联系管理员操作',
+          // data: e,
+        };
+        return;
+      }
+      const { data } = this.ctx.session.userInfo;
+
+      if (uid === data.uid) {
+        ctx.body = {
+          code: 305,
+          msg: '不能修改自己的角色，请联系管理员操作',
           // data: e,
         };
         return;
@@ -193,7 +211,7 @@ class UserController extends Controller {
     } catch (e) {
       ctx.body = {
         code: 305,
-        msg: '用户状态修改失败',
+        msg: '用户角色修改失败',
         // data: e,
       };
     }
