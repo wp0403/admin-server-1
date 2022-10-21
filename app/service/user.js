@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-07-06 11:40:04
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-21 11:16:01
+ * @LastEditTime: 2022-10-21 15:21:35
  */
 'use strict';
 
@@ -108,6 +108,31 @@ class UserService extends Service {
   // 修改用户审核状态
   async _putUserToExamine(obj) {
     const { uid, state } = obj;
+    // 获取用户的角色id
+    const userRole = await this.app.mysql.select('admin', {
+      where: { uid },
+      columns: [ 'role_id' ],
+    });
+    // 判断角色是否为超级管理员
+    if (userRole && userRole[0] && +userRole[0].role_id === 1) {
+      return {
+        code: 305,
+        msg: '您暂无该权限，请联系管理员操作',
+      // data: e,
+      };
+    }
+    if (userRole && userRole[0] && userRole[0].role_id < 3) {
+      // 判断是否有修改角色的权限
+      const isAuth = await this.service.auth.isAuth('setting@admin');
+
+      if (!isAuth) {
+        return {
+          code: 305,
+          msg: '您暂无该权限，请联系管理员操作',
+          // data: e,
+        };
+      }
+    }
     // 查找对应的数据
     const result = await this.app.mysql.update(
       'admin',

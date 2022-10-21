@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-07-06 11:39:35
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-21 11:26:29
+ * @LastEditTime: 2022-10-21 15:18:43
  */
 'use strict';
 
@@ -133,7 +133,9 @@ class UserController extends Controller {
         state,
       });
 
-      if (isEdit) {
+      if (isEdit.code === 305) {
+        ctx.body = isEdit;
+      } else if (isEdit) {
         this.service.redis.delKey('userList');
         ctx.body = {
           code: 200,

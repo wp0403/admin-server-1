@@ -4,7 +4,7 @@
  * @Author: 王鹏
  * @Date: 2022-04-09 16:18:28
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-21 10:51:45
+ * @LastEditTime: 2022-10-21 11:29:56
  */
 'use strict';
 
@@ -75,7 +75,7 @@ class UserService extends Service {
     if (result.affectedRows === 1) {
       await this.app.mysql.insert('admin_role', {
         aid: obj.uid,
-        rid: 3,
+        rid: 4,
       });
     }
     // 判断更新成功
