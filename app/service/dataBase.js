@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-07-05 13:53:41
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-07-05 14:30:08
+ * @LastEditTime: 2022-10-24 15:35:31
  */
 'use strict';
 
@@ -15,6 +15,12 @@ class CosService extends Service {
   async getCosKey() {
     return await this.app.mysql.select('data_base', {
       where: { key: [ 'SecretId', 'SecretKey' ] }, // WHERE 条件
+    });
+  }
+  // 获取邮箱授权吗
+  async getEmailCode() {
+    return await this.app.mysql.select('data_base', {
+      where: { key: [ 'emailCode' ] }, // WHERE 条件
     });
   }
 }

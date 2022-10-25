@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-09-05 14:40:45
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-17 12:51:20
+ * @LastEditTime: 2022-10-25 14:07:38
  */
 'use strict';
 
@@ -14,12 +14,20 @@ class TimeAxisService extends Service {
   // 获取时间轴列表
   async getList(obj) {
     // 解构参数
-    const { sortKey, sortOrder, type, author_id, content, page = 1, page_size = 10 } = obj;
+    const {
+      sortKey,
+      sortOrder,
+      type,
+      author_id,
+      content,
+      page = 1,
+      page_size = 10,
+    } = obj;
 
     let sql = 'select * from time_axis';
     let num = 'select count(*) from time_axis';
-    const cont = [];// 参数
-    let isMore = false;// 是否有多个查询参数
+    const cont = []; // 参数
+    let isMore = false; // 是否有多个查询参数
     /**
      * @模糊查询-量大的时候效率低
      * select * from user where name like ? % 内容 %
@@ -42,12 +50,13 @@ class TimeAxisService extends Service {
         sql += ' WHERE author_id IN (?)';
         num += ' WHERE author_id IN (?)';
       }
-      content.push(author_id);
+      cont.push(author_id);
       isMore = true;
     }
     if (type) {
-      if (isMore) { // true代表有多个参数
-        sql += 'and type IN ?';// and是两个条件都必须满足，or是或的关系
+      if (isMore) {
+        // true代表有多个参数
+        sql += 'and type IN ?'; // and是两个条件都必须满足，or是或的关系
         num += 'and type IN ?';
       } else {
         sql += ' WHERE type IN ?';
@@ -66,19 +75,15 @@ class TimeAxisService extends Service {
 
     // 开启分页
     if (page || page_size) {
-      const current = page;// 当前页码
-      const pageSize = page_size;// 一页展示多少条数据
+      const current = page; // 当前页码
+      const pageSize = page_size; // 一页展示多少条数据
       sql += ' limit ?,?';
       cont.push((current - 1) * pageSize, parseInt(pageSize));
     }
 
-    const timeAxisList = await this.app.mysql.query(
-      sql, cont
-    );
+    const timeAxisList = await this.app.mysql.query(sql, cont);
 
-    const timeAxisListNum = await this.app.mysql.query(
-      num, cont
-    );
+    const timeAxisListNum = await this.app.mysql.query(num, cont);
 
     return {
       data: timeAxisList,
@@ -101,7 +106,10 @@ class TimeAxisService extends Service {
     const { id, type } = obj;
 
     // 查找对应的数据
-    const result = await this.app.mysql.update('time_axis', { id, type: +type }); // 更新 Bowen 表中的记录
+    const result = await this.app.mysql.update('time_axis', {
+      id,
+      type: +type,
+    }); // 更新 Bowen 表中的记录
     // 判断更新成功
     return result.affectedRows === 1;
   }
@@ -116,7 +124,7 @@ class TimeAxisService extends Service {
     const result = await this.app.mysql.delete('time_axis', {
       id,
     });
-      // 判断删除成功
+    // 判断删除成功
     return result.affectedRows === 1;
   }
 }

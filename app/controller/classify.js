@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-06-21 11:09:45
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-19 23:11:49
+ * @LastEditTime: 2022-10-25 15:01:22
  */
 'use strict';
 
@@ -22,7 +22,6 @@ class ClassifyController extends Controller {
       desc,
       type,
       isDelete,
-      author,
       author_id,
       page,
       page_size,
@@ -45,7 +44,6 @@ class ClassifyController extends Controller {
         desc,
         type,
         isDelete,
-        author,
         author_id: authorId,
         page,
         page_size,
@@ -200,7 +198,7 @@ class ClassifyController extends Controller {
     try {
       const isAuth = await this.service.auth.isAuth('edit@classify');
       const { data: { uid } } = this.ctx.session.userInfo;
-      if (obj.author_id !== uid && !isAuth) {
+      if (obj.userInfo.id !== uid && !isAuth) {
         ctx.body = {
           code: 305,
           msg: '您暂无该权限，请联系管理员操作',
@@ -211,6 +209,8 @@ class ClassifyController extends Controller {
 
       const isUpdate = await this.service.auth.isAuth('update@time');
 
+      // 删除多余的属性
+      delete obj.userInfo;
       !isUpdate && delete obj.time_str;
       !isUpdate && (obj.last_edit_time = new Date());
 

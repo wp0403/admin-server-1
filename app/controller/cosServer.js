@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-07-04 17:30:40
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-08-23 13:31:34
+ * @LastEditTime: 2022-10-24 15:53:11
  */
 'use strict';
 
@@ -23,7 +23,7 @@ class CosServerController extends Controller {
       durationSeconds: 3600,
     };
 
-    await this.service.cos
+    await this.service.dataBase
       .getCosKey()
       .then(data => {
         cosKeyObj.SecretId = data.find(item => item.key === 'SecretId').value;
@@ -37,6 +37,7 @@ class CosServerController extends Controller {
           code: 300,
           msg: '签名生成失败',
         };
+        return;
       });
 
     // TODO 这里根据自己业务需要做好放行判断
@@ -76,7 +77,7 @@ class CosServerController extends Controller {
   async getCosKey() {
     const { ctx } = this;
 
-    await this.service.cos
+    await this.service.dataBase
       .getCosKey()
       .then(data => {
         ctx.body = {

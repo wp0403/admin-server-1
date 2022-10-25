@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-06-21 11:10:33
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-17 11:45:49
+ * @LastEditTime: 2022-10-25 15:37:41
  */
 'use strict';
 
@@ -22,13 +22,13 @@ class ClassifyService extends Service {
       type,
       sortKey,
       sortOrder,
-      author,
       author_id,
       page = 1,
       page_size = 10,
     } = obj;
 
-    let sql = 'select * from Bowen';
+    let sql =
+      'select a.*,json_object("id",b.uid,"name",b.name,"email",b.email) as userInfo from Bowen a left join admin b on a.author_id = b.uid';
     let num = 'select count(*) from Bowen';
     const content = []; // 参数
     let isMore = false; // 是否有多个查询参数
@@ -40,30 +40,18 @@ class ClassifyService extends Service {
      *   内容 %  查找以 内容 开头的数据
      * */
     if (title) {
-      sql += ' where title like ?';
+      sql += ' where a.title like ?';
       num += ' where title like ?';
       content.push('%' + title + '%');
-      isMore = true;
-    }
-    if (author) {
-      if (isMore) {
-        // true代表有多个参数
-        sql += 'and author LIKE ?'; // and是两个条件都必须满足，or是或的关系
-        num += 'and author LIKE ?';
-      } else {
-        sql += ' WHERE author LIKE ?';
-        num += ' WHERE author LIKE ?';
-      }
-      content.push('%' + author + '%');
       isMore = true;
     }
     if (author_id) {
       if (isMore) {
         // true代表有多个参数
-        sql += 'and author_id IN (?)'; // and是两个条件都必须满足，or是或的关系
+        sql += 'and a.author_id IN (?)'; // and是两个条件都必须满足，or是或的关系
         num += 'and author_id IN (?)';
       } else {
-        sql += ' WHERE author_id IN (?)';
+        sql += ' WHERE a.author_id IN (?)';
         num += ' WHERE author_id IN (?)';
       }
       content.push(author_id);
@@ -72,10 +60,10 @@ class ClassifyService extends Service {
     if (classify_id) {
       if (isMore) {
         // true代表有多个参数
-        sql += 'and classify_id IN (?)'; // and是两个条件都必须满足，or是或的关系
+        sql += 'and a.classify_id IN (?)'; // and是两个条件都必须满足，or是或的关系
         num += 'and classify_id IN (?)';
       } else {
-        sql += ' WHERE classify_id IN (?)';
+        sql += ' WHERE a.classify_id IN (?)';
         num += ' WHERE classify_id IN (?)';
       }
       content.push(classify_id);
@@ -84,10 +72,10 @@ class ClassifyService extends Service {
     if (classify_sub_id) {
       if (isMore) {
         // true代表有多个参数
-        sql += 'and classify_sub_id IN (?)'; // and是两个条件都必须满足，or是或的关系
+        sql += 'and a.classify_sub_id IN (?)'; // and是两个条件都必须满足，or是或的关系
         num += 'and classify_sub_id IN (?)';
       } else {
-        sql += ' WHERE classify_sub_id IN (?)';
+        sql += ' WHERE a.classify_sub_id IN (?)';
         num += ' WHERE classify_sub_id IN (?)';
       }
       content.push(classify_sub_id);
@@ -96,10 +84,10 @@ class ClassifyService extends Service {
     if (desc) {
       if (isMore) {
         // true代表有多个参数
-        sql += 'and desc LIKE ?'; // and是两个条件都必须满足，or是或的关系
+        sql += 'and a.desc LIKE ?'; // and是两个条件都必须满足，or是或的关系
         num += 'and desc LIKE ?';
       } else {
-        sql += ' WHERE desc LIKE ?';
+        sql += ' WHERE a.desc LIKE ?';
         num += ' WHERE desc LIKE ?';
       }
       content.push('%' + desc + '%');
@@ -108,10 +96,10 @@ class ClassifyService extends Service {
     if (type) {
       if (isMore) {
         // true代表有多个参数
-        sql += 'and type IN (?)'; // and是两个条件都必须满足，or是或的关系
+        sql += 'and a.type IN (?)'; // and是两个条件都必须满足，or是或的关系
         num += 'and type IN (?)';
       } else {
-        sql += ' WHERE type IN (?)';
+        sql += ' WHERE a.type IN (?)';
         num += ' WHERE type IN (?)';
       }
       content.push(type);
@@ -120,19 +108,19 @@ class ClassifyService extends Service {
 
     if (isMore) {
       // true代表有多个参数
-      sql += 'and isDelete != ?'; // and是两个条件都必须满足，or是或的关系
+      sql += 'and a.isDelete != ?'; // and是两个条件都必须满足，or是或的关系
       num += 'and isDelete != ?';
     } else {
-      sql += ' WHERE isDelete != ?';
+      sql += ' WHERE a.isDelete != ?';
       num += ' WHERE isDelete != ?';
     }
     content.push(isDelete);
 
     // 开启排序
     if (!sortKey || !sortOrder) {
-      sql += ' order by selected desc,  time_str desc';
+      sql += ' order by a.selected desc,  a.time_str desc';
     } else {
-      sql += ` order by ${sortKey} ${sortOrder}`;
+      sql += ` order by a.${sortKey} a.${sortOrder}`;
     }
 
     // 开启分页
@@ -148,7 +136,7 @@ class ClassifyService extends Service {
     const bowenListNum = await this.app.mysql.query(num, content);
 
     return {
-      data: bowenList,
+      data: bowenList.map(v => ({ ...v, userInfo: JSON.parse(v.userInfo) })),
       meta: {
         page,
         page_size,
@@ -182,7 +170,10 @@ class ClassifyService extends Service {
   }
   // 获取博文详情
   async _getClassifyDetails(id) {
-    return await this.app.mysql.get('Bowen', { id });
+    const sql =
+      'select a.*,json_object("id",b.uid,"name",b.name) as userInfo from Bowen a left join admin b on a.author_id = b.uid where a.id = ?';
+    const list = await this.app.mysql.query(sql, [ id ]);
+    return (list && list[0]) ? { ...list[0], userInfo: JSON.parse(list[0].userInfo) } : {};
   }
   // 编辑博文详情
   async _putClassifyDetails(obj) {

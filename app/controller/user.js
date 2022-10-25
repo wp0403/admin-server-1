@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-07-06 11:39:35
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-21 15:18:43
+ * @LastEditTime: 2022-10-25 14:53:34
  */
 'use strict';
 
@@ -17,19 +17,10 @@ class UserController extends Controller {
     // 解构参数
     const { keyword } = ctx.request.query;
 
-    await this.service.redis.get('userList_search').then(async data => {
-      if (data) {
-        ctx.body = {
-          code: 200,
-          msg: '获取用户列表成功',
-          ...data,
-        };
-        return;
-      }
+    if (keyword) {
       await this.service.user
         ._searchUserList(keyword)
         .then(data => {
-          this.service.redis.set('userList_search', data);
           ctx.body = {
             code: 200,
             msg: '获取用户列表成功',
@@ -43,7 +34,35 @@ class UserController extends Controller {
           };
           console.log(e);
         });
-    });
+    } else {
+      await this.service.redis.get('userList_search').then(async data => {
+        if (data) {
+          ctx.body = {
+            code: 200,
+            msg: '获取用户列表成功',
+            data,
+          };
+          return;
+        }
+        await this.service.user
+          ._searchUserList(keyword)
+          .then(data => {
+            this.service.redis.set('userList_search', data);
+            ctx.body = {
+              code: 200,
+              msg: '获取用户列表成功',
+              data,
+            };
+          })
+          .catch(e => {
+            ctx.body = {
+              code: 300,
+              msg: '获取用户列表失败',
+            };
+            console.log(e);
+          });
+      });
+    }
   }
   // 获取用户列表
   async getUserList() {
@@ -315,6 +334,18 @@ class UserController extends Controller {
         msg: '用户详情数据修改失败',
         // data: e,
       };
+    }
+  }
+  // 获取当前用户的知识数量
+  async getUserKnowledgeNum() {
+    const { ctx } = this;
+    // 解构参数
+    const { uid } = ctx.request.query;
+    if (!uid) {
+      return (ctx.body = {
+        code: 304,
+        msg: '缺失数据',
+      });
     }
   }
 }

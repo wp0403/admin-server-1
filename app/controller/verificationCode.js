@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-06-14 15:48:08
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-06-20 15:55:37
+ * @LastEditTime: 2022-10-25 13:41:09
  */
 'use strict';
 
@@ -25,7 +25,7 @@ class VerificationCodeController extends Controller {
   createVCode() {
     const { ctx } = this;
     // 字符串
-    const vCode = svgCaptcha.create({ size: 6, noise: 3 });
+    const vCode = svgCaptcha.create({ size: 6, noise: 3, ignoreChars: '0o1i' });
     // 算数式
     // const vCode = svgCaptcha.createMathExpr({ size: 6, noise: 3 });
     ctx.session.login_code = vCode.text.toLowerCase();

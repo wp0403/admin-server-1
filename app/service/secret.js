@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-06-21 11:10:33
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-17 12:35:33
+ * @LastEditTime: 2022-10-25 13:37:56
  */
 'use strict';
 
@@ -14,7 +14,7 @@ class SecretService extends Service {
   // 获取列表数据
   async getList(obj) {
     // 解构参数time_str,
-    const { author, author_id, type, content, sortKey, isDelete = 1, sortOrder, page = 1, page_size = 10 } = obj;
+    const { author_id, type, content, sortKey, isDelete = 1, sortOrder, page = 1, page_size = 10 } = obj;
 
     let sql = 'select * from secretList';
     let num = 'select count(*) from secretList';
@@ -31,17 +31,6 @@ class SecretService extends Service {
       sql += ' where content like ?';
       num += ' where content like ?';
       cont.push('%' + content + '%');
-      isMore = true;
-    }
-    if (author) {
-      if (isMore) { // true代表有多个参数
-        sql += 'and author LIKE ?';// and是两个条件都必须满足，or是或的关系
-        num += 'and author LIKE ?';
-      } else {
-        sql += ' WHERE author LIKE ?';
-        num += ' WHERE author LIKE ?';
-      }
-      cont.push('%' + author + '%');
       isMore = true;
     }
     if (author_id) {

@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-07-06 11:40:04
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-21 15:21:35
+ * @LastEditTime: 2022-10-24 18:00:55
  */
 'use strict';
 
@@ -210,6 +210,12 @@ class UserService extends Service {
     // 判断更新成功
     return result.affectedRows === 1;
   }
+  // 获取当前用户的知识数量
+  // async _getUserKnowledgeNum(uid) {
+  //   const classifyNum = this.app.mysql.query('select count(*) from Bowen and author_id = ?', [ uid ]);
+  //   const itineraryNum = this.app.mysql.query('select count(*) from playList and author_id = ?', [ uid ]);
+  //   const projectNum = this.app.mysql.query('select count(*) from projectList and author_id = ?', [ uid ]);
+  // }
 }
 
 module.exports = UserService;

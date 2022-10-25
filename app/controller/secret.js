@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-06-23 16:31:01
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-19 23:16:22
+ * @LastEditTime: 2022-10-25 13:39:45
  */
 'use strict';
 
@@ -15,7 +15,6 @@ class SecretController extends Controller {
     const { ctx } = this;
     // 解构参数
     const {
-      author,
       author_id,
       type,
       content,
@@ -38,7 +37,6 @@ class SecretController extends Controller {
 
     await this.service.secret
       .getList({
-        author,
         author_id: authorId,
         type,
         content,
