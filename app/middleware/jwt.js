@@ -5,10 +5,9 @@
  * @Author: 张三
  * @Date: 2021-07-10 11:32:33
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-24 16:47:25
+ * @LastEditTime: 2022-10-26 18:09:06
  */
 const whiteList = [ '/vcode', '/login', '/createUser' ];
-const jwt = require('jsonwebtoken');
 
 module.exports = () => {
   return async (ctx, next) => {
@@ -28,7 +27,7 @@ module.exports = () => {
     }
 
     try {
-      const userInfo = jwt.verify(token, 'wp0403');
+      const userInfo = ctx.helper.decryptToken(token);
       // 判断过期时间小于1小时更新token
       if (userInfo && userInfo.exp - (+new Date() / 1000) < 3600) {
         token = ctx.helper.loginToken({ ...userInfo.data }, 7200);
