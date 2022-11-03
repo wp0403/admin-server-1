@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-06-23 16:31:01
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-25 13:39:45
+ * @LastEditTime: 2022-11-03 10:36:12
  */
 'use strict';
 
@@ -175,7 +175,6 @@ class SecretController extends Controller {
         ctx.body = {
           code: 305,
           msg: '树洞详情数据修改失败',
-          // data: e,
         };
       }
     } catch (e) {

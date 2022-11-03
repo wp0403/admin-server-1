@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-06-21 11:10:33
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-25 15:37:41
+ * @LastEditTime: 2022-11-03 09:59:12
  */
 'use strict';
 
@@ -120,7 +120,7 @@ class ClassifyService extends Service {
     if (!sortKey || !sortOrder) {
       sql += ' order by a.selected desc,  a.time_str desc';
     } else {
-      sql += ` order by a.${sortKey} a.${sortOrder}`;
+      sql += ` order by a.${sortKey} ${sortOrder}`;
     }
 
     // 开启分页

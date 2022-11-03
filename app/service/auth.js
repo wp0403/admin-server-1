@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-08-26 10:42:46
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-17 10:42:16
+ * @LastEditTime: 2022-11-03 10:15:32
  */
 'use strict';
 
@@ -23,7 +23,6 @@ class AuthService extends Service {
     const permissions = await this.app.mysql.select('permissions', {
       where: { id: authList },
     });
-
     return permissions.some(item => item.authName === authName);
   }
 }
