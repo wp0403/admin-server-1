@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-07-06 11:40:04
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-24 18:00:55
+ * @LastEditTime: 2022-11-04 16:27:46
  */
 'use strict';
 
@@ -174,34 +174,31 @@ class UserService extends Service {
   }
   // 获取用户详情
   async _getUserDetails(id) {
-    const arr = await this.app.mysql.select('admin', {
-      where: { id },
-      columns: [
-        'id',
-        'name',
-        'username',
-        'email',
-        'phone',
-        'website',
-        'create_time',
-        'last_edit_time',
-        'state',
-        'role_id',
-        'qq',
-        'weixin',
-        'github',
-        'title',
-        'desc',
-        'about',
-        'aboutTags',
-        'secret_guide',
-        'about_page',
-        'img',
-        'uid',
-      ],
-    });
-
-    return arr[0];
+    const adminField = [ 'id', 'uid', 'name', 'username', 'email', 'phone', 'qq', 'weixin', 'github', 'website', 'img', 'personal_tags', 'state', 'create_time', 'last_edit_time', 'role_id' ];
+    const sql =
+        `select ${adminField.map(v => `${v}`).join(',')} from admin where id = ?`;
+    const list = await this.app.mysql.query(sql, [ id ]);
+    return list && list[0];
+  }
+  // 获取用户站点
+  async _getUserSite(id) {
+    const siteField = [ 'id', 'author_id', 'home_title', 'home_desc', 'home_about', 'personal_label', 'secret_guide', 'about_page' ];
+    const sql =
+          `select ${siteField.map(v => `${v}`).join(',')} from site where author_id = ?`;
+    const list = await this.app.mysql.query(sql, [ id ]);
+    console.log(list);
+    return list && (list[0] || {});
+  }
+  // 获取用户详情(弃用)
+  async __getUserDetails(id) {
+    const adminField = [ 'id', 'name', 'username', 'email', 'phone', 'qq', 'weixin', 'github', 'website', 'img', 'personal_tags', 'state', 'create_time', 'last_edit_time', 'role_id' ];
+    const siteField = [ 'id', 'author_id', 'home_title', 'home_desc', 'home_about', 'personal_label', 'secret_guide', 'about_page' ];
+    const sql =
+      `select ${adminField.map(v => `a.${v}`).join(',')},json_object(${siteField.map(v => `"${v}",b.${v}`).join(',')}) as siteInfo from admin a left join site b on a.uid = b.author_id where a.id = ?`;
+    const list = await this.app.mysql.query(sql, [ id ]);
+    return list && list[0]
+      ? { ...list[0], siteInfo: JSON.parse(list[0].siteInfo) }
+      : {};
   }
   // 修改用户详情
   async _putUserDetails(obj) {
@@ -209,6 +206,22 @@ class UserService extends Service {
 
     // 判断更新成功
     return result.affectedRows === 1;
+  }
+  // 修改用户站点
+  async _putUserSite(obj) {
+    if (obj.id) {
+      const result = await this.app.mysql.update('site', obj);
+      // 判断更新成功
+      return result.affectedRows === 1;
+    }
+
+    return await this._createUserSite(obj);
+  }
+  // 新增用户站点
+  async _createUserSite(obj) {
+    const result = await this.app.mysql.insert('site', obj);
+    // 判断更新成功
+    return result.affectedRows === 1 ? result.insertId : false;
   }
   // 获取当前用户的知识数量
   // async _getUserKnowledgeNum(uid) {

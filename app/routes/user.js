@@ -8,5 +8,7 @@ module.exports = app => {
   router.put('/putUserToExamine', controller.user.putUserToExamine); // 修改用户状态
   router.put('/putUserState', controller.user.putUserState); // 修改用户角色
   router.get('/getUserDetails', controller.user.getUserDetails); // 根据用户id获取用户详情信息
+  router.get('/getUserSite', controller.user.getUserSite); // 根据用户id获取用户站点信息
   router.put('/putUserDetails', controller.user.putUserDetails); // 更新用户详情
+  router.put('/putUserSite', controller.user.putUserSite); // 更新用户站点
 };

@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-07-06 11:39:35
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-25 14:53:34
+ * @LastEditTime: 2022-11-04 16:27:06
  */
 'use strict';
 
@@ -280,6 +280,49 @@ class UserController extends Controller {
       };
     }
   }
+  // 根据id获取用户站点信息
+  async getUserSite() {
+    const { ctx } = this;
+
+    // 解构参数
+    const { id } = ctx.request.query;
+
+    if (!id) {
+      ctx.body = {
+        code: 304,
+        msg: '缺少用户id',
+      };
+      return;
+    }
+
+    try {
+      const obj = await this.service.user._getUserSite(id);
+      const isAuth = await this.service.auth.isAuth('read@user');
+      const {
+        data: { uid },
+      } = this.ctx.session.userInfo;
+
+      if (obj.author_id !== uid && !isAuth) {
+        ctx.body = {
+          code: 305,
+          msg: '您暂无该权限，请联系管理员操作',
+          // data: e,
+        };
+        return;
+      }
+
+      ctx.body = {
+        code: 200,
+        data: obj,
+        msg: '查询用户站点信息成功',
+      };
+    } catch (e) {
+      ctx.body = {
+        code: 305,
+        msg: '查询用户站点信息失败',
+      };
+    }
+  }
   // 更新用户详情数据
   async putUserDetails() {
     const { ctx } = this;
@@ -332,6 +375,56 @@ class UserController extends Controller {
       ctx.body = {
         code: 305,
         msg: '用户详情数据修改失败',
+        // data: e,
+      };
+    }
+  }
+  // 更新用户站点信息
+  async putUserSite() {
+    const { ctx } = this;
+
+    const obj = ctx.request.body;
+
+    if (!obj) {
+      // eslint-disable-next-line no-return-assign
+      return (ctx.body = {
+        code: 304,
+        msg: '缺失详情数据',
+      });
+    }
+    try {
+      const isAuth = await this.service.auth.isAuth('edit@user');
+      const {
+        data: { uid },
+      } = this.ctx.session.userInfo;
+
+      if (obj.author_id !== uid && !isAuth) {
+        ctx.body = {
+          code: 305,
+          msg: '您暂无该权限，请联系管理员操作',
+          // data: e,
+        };
+        return;
+      }
+
+      const isEdit = await ctx.service.user._putUserSite(obj);
+      if (isEdit) {
+        this.service.redis.delKey('user');
+        ctx.body = {
+          code: 200,
+          msg: '用户站点信息修改成功',
+        };
+      } else {
+        ctx.body = {
+          code: 305,
+          msg: '用户站点信息修改失败',
+          // data: e,
+        };
+      }
+    } catch (e) {
+      ctx.body = {
+        code: 305,
+        msg: '用户站点信息修改失败',
         // data: e,
       };
     }
