@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-07-06 11:40:04
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-11-04 16:27:46
+ * @LastEditTime: 2022-11-05 01:06:00
  */
 'use strict';
 
@@ -186,7 +186,6 @@ class UserService extends Service {
     const sql =
           `select ${siteField.map(v => `${v}`).join(',')} from site where author_id = ?`;
     const list = await this.app.mysql.query(sql, [ id ]);
-    console.log(list);
     return list && (list[0] || {});
   }
   // 获取用户详情(弃用)
@@ -224,11 +223,33 @@ class UserService extends Service {
     return result.affectedRows === 1 ? result.insertId : false;
   }
   // 获取当前用户的知识数量
-  // async _getUserKnowledgeNum(uid) {
-  //   const classifyNum = this.app.mysql.query('select count(*) from Bowen and author_id = ?', [ uid ]);
-  //   const itineraryNum = this.app.mysql.query('select count(*) from playList and author_id = ?', [ uid ]);
-  //   const projectNum = this.app.mysql.query('select count(*) from projectList and author_id = ?', [ uid ]);
-  // }
+  async _getUserKnowledgeNum(uid) {
+    const obj = {
+      article: 0,
+      diary: 0,
+      project: 0,
+      secret: 0,
+    };
+
+    const promistList = [
+      this.app.mysql.query('select count(*) from Bowen where author_id = ? and isDelete = 0', [ uid ]), // 文章数量
+      this.app.mysql.query('select count(*) from playList where author_id = ? and isDelete = 0', [ uid ]), // 旅行日记数量
+      this.app.mysql.query('select count(*) from projectList where author_id = ? and isDelete = 0', [ uid ]), // 项目数量
+      this.app.mysql.query('select count(*) from secretList where author_id = ? and isDelete = 0', [ uid ]), // 树洞数量
+    ];
+
+    return Promise.all(promistList).then(res => {
+      obj.article = res[0][0]['count(*)'];
+      obj.diary = res[1][0]['count(*)'];
+      obj.project = res[2][0]['count(*)'];
+      obj.secret = res[3][0]['count(*)'];
+
+      return obj;
+    }).catch(e => {
+      console.log(e);
+      return false;
+    });
+  }
 }
 
 module.exports = UserService;

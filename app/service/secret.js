@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-06-21 11:10:33
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-11-03 10:09:23
+ * @LastEditTime: 2022-11-05 01:33:39
  */
 'use strict';
 
@@ -19,7 +19,7 @@ class SecretService extends Service {
       type,
       content,
       sortKey,
-      isDelete = 1,
+      isDelete = 0,
       sortOrder,
       page = 1,
       page_size = 10,
@@ -72,11 +72,11 @@ class SecretService extends Service {
     if (isDelete) {
       if (isMore) {
         // true代表有多个参数
-        sql += 'and a.isDelete != ?'; // and是两个条件都必须满足，or是或的关系
-        num += 'and isDelete != ?';
+        sql += 'and a.isDelete = ?'; // and是两个条件都必须满足，or是或的关系
+        num += 'and isDelete = ?';
       } else {
-        sql += ' WHERE a.isDelete != ?';
-        num += ' WHERE isDelete != ?';
+        sql += ' WHERE a.isDelete = ?';
+        num += ' WHERE isDelete = ?';
       }
       cont.push(isDelete);
       isMore = true;

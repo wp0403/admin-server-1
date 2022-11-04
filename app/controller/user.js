@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-07-06 11:39:35
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-11-04 16:27:06
+ * @LastEditTime: 2022-11-05 00:50:10
  */
 'use strict';
 
@@ -439,6 +439,26 @@ class UserController extends Controller {
         code: 304,
         msg: '缺失数据',
       });
+    }
+
+    try {
+      await this.service.user._getUserKnowledgeNum(uid).then(res => {
+        ctx.body = {
+          code: 200,
+          msg: '用户数据数量获取成功',
+          data: res,
+        };
+      }).catch(() => {
+        ctx.body = {
+          code: 305,
+          msg: '用户数据数量获取失败',
+        };
+      });
+    } catch (e) {
+      ctx.body = {
+        code: 305,
+        msg: '用户数据数量获取失败',
+      };
     }
   }
 }

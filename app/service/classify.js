@@ -18,7 +18,7 @@ class ClassifyService extends Service {
       classify_id,
       classify_sub_id,
       desc,
-      isDelete = 1,
+      isDelete = 0,
       type,
       sortKey,
       sortOrder,
@@ -108,11 +108,11 @@ class ClassifyService extends Service {
 
     if (isMore) {
       // true代表有多个参数
-      sql += 'and a.isDelete != ?'; // and是两个条件都必须满足，or是或的关系
-      num += 'and isDelete != ?';
+      sql += 'and a.isDelete = ?'; // and是两个条件都必须满足，or是或的关系
+      num += 'and isDelete = ?';
     } else {
-      sql += ' WHERE a.isDelete != ?';
-      num += ' WHERE isDelete != ?';
+      sql += ' WHERE a.isDelete = ?';
+      num += ' WHERE isDelete = ?';
     }
     content.push(isDelete);
 

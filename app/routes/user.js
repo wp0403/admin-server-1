@@ -11,4 +11,5 @@ module.exports = app => {
   router.get('/getUserSite', controller.user.getUserSite); // 根据用户id获取用户站点信息
   router.put('/putUserDetails', controller.user.putUserDetails); // 更新用户详情
   router.put('/putUserSite', controller.user.putUserSite); // 更新用户站点
+  router.get('/getUserKnowledgeNum', controller.user.getUserKnowledgeNum); // 根据id获取用户数据数量
 };
