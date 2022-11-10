@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-06-21 11:10:33
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-11-03 09:59:12
+ * @LastEditTime: 2022-11-05 15:36:41
  */
 'use strict';
 
@@ -173,7 +173,13 @@ class ClassifyService extends Service {
     const sql =
       'select a.*,json_object("id",b.uid,"name",b.name) as userInfo from Bowen a left join admin b on a.author_id = b.uid where a.id = ?';
     const list = await this.app.mysql.query(sql, [ id ]);
-    return (list && list[0]) ? { ...list[0], userInfo: JSON.parse(list[0].userInfo) } : {};
+    const obj = (list && list[0]) ? { ...list[0], userInfo: JSON.parse(list[0].userInfo) } : {};
+    this._setClassifyDetailsViews(id, obj.views);
+    return obj;
+  }
+  // 博文浏览量+1
+  async _setClassifyDetailsViews(id, num) {
+    await this.app.mysql.update('Bowen', { id, views: num += 1 });
   }
   // 编辑博文详情
   async _putClassifyDetails(obj) {

@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-09-06 09:39:32
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-17 12:31:14
+ * @LastEditTime: 2022-11-05 01:56:25
  */
 'use strict';
 
@@ -33,7 +33,8 @@ class ResourcesService extends Service {
       page_size = 10,
     } = obj;
 
-    let sql = 'select * from img_list';
+    let sql =
+    'select a.*,json_object("id",b.uid,"name",b.name,"email",b.email) as userInfo from img_list a left join admin b on a.author_id = b.uid';
     let num = 'select count(*) from img_list';
     const content = []; // 参数
     let isMore = false; // 是否有多个查询参数
@@ -82,7 +83,7 @@ class ResourcesService extends Service {
     const imgListNum = await this.app.mysql.query(num, content);
 
     return {
-      data: imgList,
+      data: imgList.map(v => ({ ...v, userInfo: JSON.parse(v.userInfo) })),
       meta: {
         page,
         page_size,

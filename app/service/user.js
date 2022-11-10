@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-07-06 11:40:04
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-11-05 01:06:00
+ * @LastEditTime: 2022-11-05 15:20:20
  */
 'use strict';
 
@@ -37,7 +37,7 @@ class UserService extends Service {
     } = obj;
 
     let sql =
-      'select id,name,username,email,phone,website,create_time,last_edit_time,state,role_id,uid from admin';
+      'select id,name,username,email,phone,website,create_time,last_edit_time,state,role_id,uid,work,address from admin';
     let num = 'select count(*) from admin';
     const content = []; // 参数
     let isMore = false; // 是否有多个查询参数
@@ -174,7 +174,7 @@ class UserService extends Service {
   }
   // 获取用户详情
   async _getUserDetails(id) {
-    const adminField = [ 'id', 'uid', 'name', 'username', 'email', 'phone', 'qq', 'weixin', 'github', 'website', 'img', 'personal_tags', 'state', 'create_time', 'last_edit_time', 'role_id' ];
+    const adminField = [ 'id', 'uid', 'name', 'username', 'email', 'phone', 'qq', 'weixin', 'github', 'website', 'img', 'personal_tags', 'state', 'create_time', 'last_edit_time', 'role_id', 'work', 'address' ];
     const sql =
         `select ${adminField.map(v => `${v}`).join(',')} from admin where id = ?`;
     const list = await this.app.mysql.query(sql, [ id ]);
@@ -187,17 +187,6 @@ class UserService extends Service {
           `select ${siteField.map(v => `${v}`).join(',')} from site where author_id = ?`;
     const list = await this.app.mysql.query(sql, [ id ]);
     return list && (list[0] || {});
-  }
-  // 获取用户详情(弃用)
-  async __getUserDetails(id) {
-    const adminField = [ 'id', 'name', 'username', 'email', 'phone', 'qq', 'weixin', 'github', 'website', 'img', 'personal_tags', 'state', 'create_time', 'last_edit_time', 'role_id' ];
-    const siteField = [ 'id', 'author_id', 'home_title', 'home_desc', 'home_about', 'personal_label', 'secret_guide', 'about_page' ];
-    const sql =
-      `select ${adminField.map(v => `a.${v}`).join(',')},json_object(${siteField.map(v => `"${v}",b.${v}`).join(',')}) as siteInfo from admin a left join site b on a.uid = b.author_id where a.id = ?`;
-    const list = await this.app.mysql.query(sql, [ id ]);
-    return list && list[0]
-      ? { ...list[0], siteInfo: JSON.parse(list[0].siteInfo) }
-      : {};
   }
   // 修改用户详情
   async _putUserDetails(obj) {

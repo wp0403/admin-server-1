@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-09-06 09:48:52
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-17 12:30:30
+ * @LastEditTime: 2022-11-05 02:02:42
  */
 'use strict';
 
@@ -92,7 +92,6 @@ class ResourcesController extends Controller {
       const { data } = this.ctx.session.userInfo;
       const isTrue = await ctx.service.resources._insertImg({
         ...obj,
-        author: data.username,
         author_id: data.uid,
       });
 
