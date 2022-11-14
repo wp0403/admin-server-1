@@ -9,4 +9,8 @@ module.exports = app => {
   router.put('/putImg', controller.resources.insertImg);
   // 获取图片列表
   router.get('/getImgList', controller.resources.getImgList);
+  // 修改图片状态
+  router.put('/delImg', controller.resources.delImg);
+  // 永久删除图片
+  router.delete('/deleteImg', controller.resources.deleteImg);
 };

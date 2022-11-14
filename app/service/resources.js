@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-09-06 09:39:32
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-11-05 01:56:25
+ * @LastEditTime: 2022-11-14 17:17:53
  */
 'use strict';
 
@@ -31,6 +31,7 @@ class ResourcesService extends Service {
       author_id,
       page = 1,
       page_size = 10,
+      isDelete = 0,
     } = obj;
 
     let sql =
@@ -63,6 +64,15 @@ class ResourcesService extends Service {
       content.push(author_id);
       isMore = true;
     }
+    if (isMore) {
+      // true代表有多个参数
+      sql += 'and a.isDelete = ?'; // and是两个条件都必须满足，or是或的关系
+      num += 'and isDelete = ?';
+    } else {
+      sql += ' WHERE a.isDelete = ?';
+      num += ' WHERE isDelete = ?';
+    }
+    content.push(isDelete);
     // 开启排序
     if (!sortKey || !sortOrder) {
       sql += ' order by id desc,create_time desc';
@@ -101,6 +111,26 @@ class ResourcesService extends Service {
       res = await this.app.mysql.insert('img_list', v);
     }
     return res.affectedRows === 1;
+  }
+  // 是否放入回收站
+  async _delImg(obj) {
+    const { id, isDelete } = obj;
+
+    // 查找对应的数据
+    const result = await this.app.mysql.update('img_list', {
+      id,
+      isDelete: isDelete ? 1 : 0,
+    }); // 更新表中的记录
+      // 判断更新成功
+    return result.affectedRows === 1;
+  }
+  // 删除图片
+  async _deleteImg(id) {
+    const result = await this.app.mysql.delete('img_list', {
+      id,
+    });
+      // 判断删除成功
+    return result.affectedRows === 1;
   }
 }
 

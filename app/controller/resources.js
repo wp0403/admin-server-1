@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-09-06 09:48:52
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-11-05 02:02:42
+ * @LastEditTime: 2022-11-14 17:47:39
  */
 'use strict';
 
@@ -111,6 +111,80 @@ class ResourcesController extends Controller {
       ctx.body = {
         code: 305,
         msg: '数据导入失败',
+        // data: e,
+      };
+    }
+  }
+  // 放入回收站
+  async delImg() {
+    const { ctx } = this;
+    // 解构参数
+    const { id, isDelete, authorId } = ctx.request.body;
+
+    const isAuth = await this.service.auth.isAuth('delete@img');
+    const { data: { uid } } = this.ctx.session.userInfo;
+    if (authorId !== uid && !isAuth) {
+      ctx.body = {
+        code: 305,
+        msg: '您暂无该权限，请联系管理员操作',
+        // data: e,
+      };
+      return;
+    }
+
+    await this.service.resources
+      ._delImg({ id, isDelete })
+      .then(data => {
+        ctx.body = {
+          code: 200,
+          msg: '操作成功',
+          data,
+        };
+      })
+      .catch(e => {
+        console.log(e);
+        ctx.body = {
+          code: 300,
+          msg: '操作失败',
+        };
+      });
+  }
+  // 永久删除图片
+  async deleteImg() {
+    const { ctx } = this;
+    // 解构参数
+    const { id } = ctx.request.body;
+
+    try {
+      const isAuth = await this.service.auth.isAuth('delete@img');
+
+      if (!isAuth) {
+        ctx.body = {
+          code: 305,
+          msg: '您暂无该权限，请联系管理员操作',
+          // data: e,
+        };
+        return;
+      }
+
+      const isEdit = await ctx.service.resources._deleteImg(id);
+
+      if (isEdit) {
+        ctx.body = {
+          code: 200,
+          msg: '图片删除成功',
+        };
+      } else {
+        ctx.body = {
+          code: 305,
+          msg: '图片删除失败',
+          // data: e,
+        };
+      }
+    } catch (e) {
+      ctx.body = {
+        code: 305,
+        msg: '图片删除失败',
         // data: e,
       };
     }
