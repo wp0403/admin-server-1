@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-10-20 16:06:29
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-27 10:03:46
+ * @LastEditTime: 2022-11-14 15:51:34
  */
 'use strict';
 
@@ -17,7 +17,7 @@ class RedisService extends Service {
     // seconds 有效时长
     const { redis } = this.app;
     value = JSON.stringify(value);
-    await redis.set(key, value, 'EX', seconds || time).then(() => {
+    return await redis.set(key, value, 'EX', seconds || time).then(() => {
       return true;
     }).catch(e => {
       new Error(e);
@@ -27,7 +27,7 @@ class RedisService extends Service {
   // 获取
   async get(key) {
     const { redis } = this.app;
-    await redis.get(key).then(data => {
+    return await redis.get(key).then(data => {
       if (data) data = JSON.parse(data);
       return data;
     }).catch(e => {

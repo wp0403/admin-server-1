@@ -3,9 +3,14 @@
 
 module.exports = app => {
   const { router, controller } = app;
-  router.get('/getTimeAxisList', controller.timeAxis.getList); // 获取列表接口
-  router.put('/putTimeAxisDetails', controller.timeAxis.putTimeAxisDetails); // 更新详情
-  router.put('/putTimeAxisToExamine', controller.timeAxis.putTimeAxisToExamine); // 修改审核状态
-  router.post('/createTimeAxisDetails', controller.timeAxis.createTimeAxisDetails); // 新增
-  router.delete('/deleteTimeAxisDetails', controller.timeAxis.deleteTimeAxisDetails); // 删除
+  // 获取列表接口
+  router.get('/getTimeAxisList', controller.timeAxis.getList);
+  // 更新详情
+  router.put('/putTimeAxisDetails', controller.timeAxis.putTimeAxisDetails);
+  // 修改审核状态
+  router.put('/putTimeAxisToExamine', controller.timeAxis.putTimeAxisToExamine);
+  // 新增
+  router.post('/createTimeAxisDetails', controller.timeAxis.createTimeAxisDetails);
+  // 删除
+  router.delete('/deleteTimeAxisDetails', controller.timeAxis.deleteTimeAxisDetails);
 };

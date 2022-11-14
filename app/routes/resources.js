@@ -3,7 +3,10 @@
 
 module.exports = app => {
   const { router, controller } = app;
-  router.put('/putImgList', controller.resources.insertImgs); // 批量写入图片数据
-  router.put('/putImg', controller.resources.insertImg); // 写入图片数据
-  router.get('/getImgList', controller.resources.getImgList); // 获取图片列表
+  // 批量写入图片数据
+  router.put('/putImgList', controller.resources.insertImgs);
+  // 写入图片数据
+  router.put('/putImg', controller.resources.insertImg);
+  // 获取图片列表
+  router.get('/getImgList', controller.resources.getImgList);
 };

@@ -38,6 +38,14 @@ module.exports = appInfo => {
     allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
   };
 
+  // 定时任务
+  config.customLogger = {
+    scheduleLogger: {
+      // consoleLevel: 'NONE',
+      // file: path.join(appInfo.root, 'logs', appInfo.name, 'egg-schedule.log'),
+    },
+  };
+
   config.onerror = {
     all(err, ctx) {
       // 在此处定义针对所有响应类型的错误处理方法

@@ -3,5 +3,6 @@
 
 module.exports = app => {
   const { router, controller } = app;
-  router.post('/sendOutEmail', controller.emailServer.sendOutEmail); // 发送邮件
+  // 发送邮件
+  router.post('/sendOutEmail', controller.emailServer.sendOutEmail);
 };

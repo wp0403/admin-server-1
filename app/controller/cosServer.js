@@ -4,14 +4,15 @@
  * @Author: WangPeng
  * @Date: 2022-07-04 17:30:40
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-24 15:53:11
+ * @LastEditTime: 2022-11-12 14:26:44
  */
 'use strict';
 
 const Controller = require('egg').Controller;
 const STS = require('qcloud-cos-sts');
 class CosServerController extends Controller {
-  async index() {
+  // 获取cos的临时密钥
+  async getCosTemporaryKey() {
     const { ctx } = this;
     const cosKeyObj = {};
     const config = {
@@ -24,7 +25,7 @@ class CosServerController extends Controller {
     };
 
     await this.service.dataBase
-      .getCosKey()
+      .getKey([ 'SecretId', 'SecretKey' ])
       .then(data => {
         cosKeyObj.SecretId = data.find(item => item.key === 'SecretId').value;
         cosKeyObj.SecretKey = data.find(
@@ -53,13 +54,22 @@ class CosServerController extends Controller {
     // 数据万象DescribeMediaBuckets接口需要resource为*,参考 https://cloud.tencent.com/document/product/460/41741
     const policy = {
       version: '2.0',
-      statement: [{
-        action: config.allowActions,
-        effect: 'allow',
-        resource: [
-          'qcs::cos:' + config.region + ':uid/' + AppId + ':' + config.bucket + '/' + config.allowPrefix,
-        ],
-      }],
+      statement: [
+        {
+          action: config.allowActions,
+          effect: 'allow',
+          resource: [
+            'qcs::cos:' +
+              config.region +
+              ':uid/' +
+              AppId +
+              ':' +
+              config.bucket +
+              '/' +
+              config.allowPrefix,
+          ],
+        },
+      ],
     };
     const startTime = Math.round(Date.now() / 1000);
     await STS.getCredential({
@@ -72,27 +82,6 @@ class CosServerController extends Controller {
       data.startTime = startTime;
       ctx.body = data;
     });
-  }
-
-  async getCosKey() {
-    const { ctx } = this;
-
-    await this.service.dataBase
-      .getCosKey()
-      .then(data => {
-        ctx.body = {
-          code: 200,
-          msg: '数据获取成功',
-          data,
-        };
-      })
-      .catch(e => {
-        console.log(e);
-        ctx.body = {
-          code: 300,
-          msg: '数据获取失败',
-        };
-      });
   }
 }
 

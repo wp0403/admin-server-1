@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-10-24 15:23:40
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-24 16:57:01
+ * @LastEditTime: 2022-11-12 14:29:04
  */
 'use strict';
 
@@ -22,26 +22,6 @@ const createEmailUser = {
 };
 
 class EmailController extends Controller {
-  // 获取邮箱授权码
-  async getEmailCode() {
-    const { ctx } = this;
-
-    await this.service.dataBase
-      .getEmailCode()
-      .then(data => {
-        createEmailUser.auth.pass = data.find(
-          item => item.key === 'emailCode'
-        ).value;
-      })
-      .catch(e => {
-        console.log(e);
-        ctx.body = {
-          code: 300,
-          msg: '邮箱授权码获取失败',
-        };
-      });
-  }
-
   // 发送邮件
   async sendOutEmail() {
     const { ctx } = this;
@@ -56,7 +36,7 @@ class EmailController extends Controller {
     }
 
     await this.service.dataBase
-      .getEmailCode()
+      .getCode([ 'emailCode' ])
       .then(data => {
         createEmailUser.auth.pass = data[0] && data[0].value;
       })
