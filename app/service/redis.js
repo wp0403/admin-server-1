@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-10-20 16:06:29
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-11-14 15:51:34
+ * @LastEditTime: 2022-11-15 16:57:40
  */
 'use strict';
 
@@ -35,7 +35,7 @@ class RedisService extends Service {
       return e;
     });
   }
-  // 删除指定前缀的缓存
+  // 删除指定的缓存
   async delKey(key) {
     const { redis } = this.app;
     await redis.del(key).then(() => {

@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-07-06 11:39:35
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-11-05 00:50:10
+ * @LastEditTime: 2022-11-15 16:57:57
  */
 'use strict';
 
@@ -155,7 +155,7 @@ class UserController extends Controller {
       if (isEdit.code === 305) {
         ctx.body = isEdit;
       } else if (isEdit) {
-        this.service.redis.delKey('userList');
+        this.service.redis.delKeys('userList_');
         ctx.body = {
           code: 200,
           msg: '用户状态修改成功',
@@ -217,7 +217,7 @@ class UserController extends Controller {
       });
 
       if (isEdit) {
-        this.service.redis.delKey('userList');
+        this.service.redis.delKeys('userList_');
         ctx.body = {
           code: 200,
           msg: '用户角色修改成功',

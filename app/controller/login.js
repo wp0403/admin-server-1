@@ -4,7 +4,7 @@
  * @Author: 王鹏
  * @Date: 2022-04-08 23:05:36
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-11-12 15:12:25
+ * @LastEditTime: 2022-11-15 16:57:46
  */
 'use strict';
 
@@ -113,6 +113,7 @@ class LoginController extends Controller {
       if (data.code === 305) {
         ctx.body = data;
       } else if (data) {
+        this.service.redis.delKeys('userList_');
         ctx.body = {
           code: 200,
           data,
