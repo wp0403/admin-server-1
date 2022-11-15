@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-09-06 09:39:32
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-11-14 17:17:53
+ * @LastEditTime: 2022-11-15 11:20:34
  */
 'use strict';
 
@@ -118,8 +118,11 @@ class ResourcesService extends Service {
 
     // 查找对应的数据
     const result = await this.app.mysql.update('img_list', {
-      id,
       isDelete: isDelete ? 1 : 0,
+    }, {
+      where: {
+        id,
+      },
     }); // 更新表中的记录
       // 判断更新成功
     return result.affectedRows === 1;

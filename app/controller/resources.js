@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-09-06 09:48:52
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-11-14 17:47:39
+ * @LastEditTime: 2022-11-15 13:55:26
  */
 'use strict';
 
@@ -48,6 +48,7 @@ class ResourcesController extends Controller {
       name,
       page,
       author_id,
+      isDelete,
       page_size,
     } = ctx.request.query;
 
@@ -64,6 +65,7 @@ class ResourcesController extends Controller {
       ._getImgList({
         name,
         page,
+        isDelete,
         author_id: authorId,
         page_size,
       })
