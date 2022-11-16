@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-11-12 14:41:11
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-11-16 17:27:41
+ * @LastEditTime: 2022-11-16 18:01:01
  */
 'use strict';
 
@@ -36,7 +36,7 @@ class TianapiService extends Service {
       dataType: 'json',
       data: {
         key: tianApiKey,
-        city: ctx.ip, // ctx.ip '101020100'
+        city: ctx.header['x-real-ip'], // ctx.ip '101020100'
         type: '1',
       },
     });

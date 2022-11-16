@@ -72,6 +72,8 @@ module.exports = appInfo => {
     pageUrl: '/404.html',
   };
 
+  config.proxy = true;
+
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',
