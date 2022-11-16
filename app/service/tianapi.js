@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-11-12 14:41:11
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-11-12 20:52:19
+ * @LastEditTime: 2022-11-16 17:27:41
  */
 'use strict';
 
@@ -28,7 +28,7 @@ class TianapiService extends Service {
    * 查询当前登录ip的天气
    * https://www.tianapi.com/apiview/72
    */
-  async getWeather() {
+  async _getWeather() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/tianqi/index', {
@@ -36,7 +36,7 @@ class TianapiService extends Service {
       dataType: 'json',
       data: {
         key: tianApiKey,
-        city: ctx.ip,
+        city: ctx.ip, // ctx.ip '101020100'
         type: '1',
       },
     });

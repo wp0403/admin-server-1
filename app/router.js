@@ -13,4 +13,5 @@ module.exports = app => {
   require('./routes/user')(app);
   require('./routes/resources')(app);
   require('./routes/emailServer')(app);
+  require('./routes/tianapi')(app);
 };
