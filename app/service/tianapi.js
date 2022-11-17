@@ -1,10 +1,11 @@
+/* eslint-disable jsdoc/require-param */
 /*
  * @Descripttion: 天行数据接口
  * @version:
  * @Author: WangPeng
  * @Date: 2022-11-12 14:41:11
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-11-16 18:01:01
+ * @LastEditTime: 2022-11-17 18:05:40
  */
 'use strict';
 
@@ -46,7 +47,7 @@ class TianapiService extends Service {
    * 获取抖音热榜
    * https://www.tianapi.com/apiview/155
    */
-  async getDouyinhot() {
+  async _getDouyinhot() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/douyinhot/index', {
@@ -63,7 +64,7 @@ class TianapiService extends Service {
    * https://www.tianapi.com/apiview/91
    * tqtype 天气类型 int
    */
-  async getWeatherVerse() {
+  async _getWeatherVerse() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/tianqishiju/index', {
@@ -79,7 +80,7 @@ class TianapiService extends Service {
    * 获取朋友圈文案
    * https://www.tianapi.com/apiview/194
    */
-  async getPyqwenan() {
+  async _getPyqwenan() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/pyqwenan/index', {
@@ -98,7 +99,7 @@ class TianapiService extends Service {
    * imgurl   string  非必填  图片URL（支持jpg/png/bmp/gif格式）
    * imgtype  int     非必填  图片类型，静态0[默认]，动态1
    */
-  async getImgcensor() {
+  async _getImgcensor() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/imgcensor/index', {
@@ -117,7 +118,7 @@ class TianapiService extends Service {
    * page  int      非必填  翻页
    * word  string   必填    搜索词
    */
-  async getShares() {
+  async _getShares() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/shares/index', {
@@ -133,7 +134,7 @@ class TianapiService extends Service {
    * 精美句子
    * https://www.tianapi.com/apiview/53
    */
-  async getSentence() {
+  async _getSentence() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/sentence/index', {
@@ -149,7 +150,7 @@ class TianapiService extends Service {
    * 小段子
    * https://www.tianapi.com/apiview/56
    */
-  async getMnpara() {
+  async _getMnpara() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/mnpara/index', {
@@ -165,7 +166,7 @@ class TianapiService extends Service {
    * 英语一句话
    * https://www.tianapi.com/apiview/62
    */
-  async getEnsentence() {
+  async _getEnsentence() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/ensentence/index', {
@@ -181,7 +182,7 @@ class TianapiService extends Service {
    * 古籍名句
    * https://www.tianapi.com/apiview/190
    */
-  async getGjmj() {
+  async _getGjmj() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/gjmj/index', {
@@ -197,7 +198,7 @@ class TianapiService extends Service {
    * 最美宋词
    * https://www.tianapi.com/apiview/195
    */
-  async getZmsc() {
+  async _getZmsc() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/zmsc/index', {
@@ -214,7 +215,7 @@ class TianapiService extends Service {
    * https://www.tianapi.com/apiview/236
    * type  int  非必填  分类查询，1离别,2人生,3生活,4四季
    */
-  async getMoodpoetry() {
+  async _getMoodpoetry() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/moodpoetry/index', {
@@ -230,7 +231,7 @@ class TianapiService extends Service {
    * 百度热搜榜
    * https://www.tianapi.com/apiview/68
    */
-  async getNethot() {
+  async _getNethot() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/nethot/index', {
@@ -249,7 +250,7 @@ class TianapiService extends Service {
    * page  int      非必填   翻页
    * word  string   必填    搜索词
    */
-  async getHotword() {
+  async _getHotword() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/hotword/index', {
@@ -266,7 +267,7 @@ class TianapiService extends Service {
    * https://www.tianapi.com/apiview/39
    * num   int      必填    返回数量
    */
-  async getGodreply() {
+  async _getGodreply() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/godreply/index', {
@@ -286,7 +287,7 @@ class TianapiService extends Service {
    * word  string   必填    搜索词
    * type  int      非必填  故事类型，成语1、睡前2、童话3、寓言4
    */
-  async getStory() {
+  async _getStory() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/story/index', {
@@ -304,7 +305,7 @@ class TianapiService extends Service {
    * rand  int      非必填   是否随机
    * date  string   非必填   指定时间，默认当天
    */
-  async getOne() {
+  async _getOne() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/one/index', {
@@ -320,7 +321,7 @@ class TianapiService extends Service {
    * 毒鸡汤
    * https://www.tianapi.com/apiview/130
    */
-  async getDujitang() {
+  async _getDujitang() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/dujitang/index', {
@@ -336,7 +337,7 @@ class TianapiService extends Service {
    * 云音乐热评
    * https://www.tianapi.com/apiview/160
    */
-  async getHotreview() {
+  async _getHotreview() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/hotreview/index', {
@@ -352,7 +353,7 @@ class TianapiService extends Service {
    * 舔狗日记
    * https://www.tianapi.com/apiview/180
    */
-  async getTiangou() {
+  async _getTiangou() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/tiangou/index', {
@@ -368,7 +369,7 @@ class TianapiService extends Service {
    * 彩虹屁
    * https://www.tianapi.com/apiview/181
    */
-  async getCaihongpi() {
+  async _getCaihongpi() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/caihongpi/index', {
@@ -384,7 +385,7 @@ class TianapiService extends Service {
    * 经典台词
    * https://www.tianapi.com/apiview/183
    */
-  async getDialogue() {
+  async _getDialogue() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/dialogue/index', {
@@ -405,7 +406,7 @@ class TianapiService extends Service {
    * town       string   非必填  故乡镇（街道）级行政区ID，获取社区（村）级行政区
    * village    string   非必填  社区（村）级行政区ID，获取全部上级行政区
    */
-  async getArea() {
+  async _getArea() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/area/index', {
@@ -421,7 +422,7 @@ class TianapiService extends Service {
    * 全网热搜榜
    * https://www.tianapi.com/apiview/223
    */
-  async getNetworkhot() {
+  async _getNetworkhot() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/networkhot/index', {
@@ -437,14 +438,17 @@ class TianapiService extends Service {
    * 国际新闻
    * https://www.tianapi.com/apiview/5
    */
-  async getWorld() {
+  async _getWorld({ page, pageSize, word }) {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/world/index', {
       method: 'post',
       dataType: 'json',
       data: {
+        ...(word ? { word } : {}),
+        page: page || 1,
         key: tianApiKey,
+        num: pageSize || 20,
       },
     });
     return result;
@@ -457,14 +461,17 @@ class TianapiService extends Service {
    * word  string   非必填   搜索词
    * rand  int      非必填   随机获取
    */
-  async getSocial() {
+  async _getSocial({ page, pageSize, word }) {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/social/index', {
       method: 'post',
       dataType: 'json',
       data: {
+        ...(word ? { word } : {}),
+        page: page || 1,
         key: tianApiKey,
+        num: pageSize || 20,
       },
     });
     return result;
@@ -477,14 +484,17 @@ class TianapiService extends Service {
    * word  string   非必填   搜索词
    * rand  int      非必填   随机获取
    */
-  async getGuonei() {
+  async _getGuonei({ page, pageSize, word }) {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/guonei/index', {
       method: 'post',
       dataType: 'json',
       data: {
+        ...(word ? { word } : {}),
+        page: page || 1,
         key: tianApiKey,
+        num: pageSize || 20,
       },
     });
     return result;
@@ -497,14 +507,17 @@ class TianapiService extends Service {
    * word  string   非必填   搜索词
    * rand  int      非必填   随机获取
    */
-  async getKeji() {
+  async _getKeji({ page, pageSize, word }) {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/keji/index', {
       method: 'post',
       dataType: 'json',
       data: {
+        ...(word ? { word } : {}),
+        page: page || 1,
         key: tianApiKey,
+        num: pageSize || 20,
       },
     });
     return result;
@@ -517,14 +530,17 @@ class TianapiService extends Service {
    * word  string   非必填   搜索词
    * rand  int      非必填   随机获取
    */
-  async getBlockchain() {
+  async _getBlockchain({ page, pageSize, word }) {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/blockchain/index', {
       method: 'post',
       dataType: 'json',
       data: {
+        ...(word ? { word } : {}),
+        page: page || 1,
         key: tianApiKey,
+        num: pageSize || 20,
       },
     });
     return result;
@@ -537,7 +553,7 @@ class TianapiService extends Service {
    * word  string   非必填   搜索词
    * rand  int      非必填   随机获取
    */
-  async getIt() {
+  async _getIt() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/it/index', {
@@ -557,7 +573,7 @@ class TianapiService extends Service {
    * word  string   非必填   搜索词
    * rand  int      非必填   随机获取
    */
-  async getInternet() {
+  async _getInternet() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/internet/index', {
@@ -573,7 +589,7 @@ class TianapiService extends Service {
    * 早安心语
    * https://www.tianapi.com/apiview/143
    */
-  async getZaoan() {
+  async _getZaoan() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/zaoan/index', {
@@ -589,7 +605,7 @@ class TianapiService extends Service {
    * 晚安心语
    * https://www.tianapi.com/apiview/142
    */
-  async getWanan() {
+  async _getWanan() {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/wanan/index', {
