@@ -5,7 +5,7 @@
  * @Author: WangPeng
  * @Date: 2022-11-12 14:41:11
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-11-17 18:05:40
+ * @LastEditTime: 2022-11-18 14:51:46
  */
 'use strict';
 
@@ -553,14 +553,17 @@ class TianapiService extends Service {
    * word  string   非必填   搜索词
    * rand  int      非必填   随机获取
    */
-  async _getIt() {
+  async _getIt({ page, pageSize, word }) {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/it/index', {
       method: 'post',
       dataType: 'json',
       data: {
+        ...(word ? { word } : {}),
+        page: page || 1,
         key: tianApiKey,
+        num: pageSize || 20,
       },
     });
     return result;
@@ -573,14 +576,17 @@ class TianapiService extends Service {
    * word  string   非必填   搜索词
    * rand  int      非必填   随机获取
    */
-  async _getInternet() {
+  async _getInternet({ page, pageSize, word }) {
     const { ctx } = this;
     await this.getTianApiKey();
     const result = await ctx.curl('https://apis.tianapi.com/internet/index', {
       method: 'post',
       dataType: 'json',
       data: {
+        ...(word ? { word } : {}),
+        page: page || 1,
         key: tianApiKey,
+        num: pageSize || 20,
       },
     });
     return result;

@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-11-16 14:54:04
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-11-17 17:22:35
+ * @LastEditTime: 2022-11-18 14:53:10
  */
 'use strict';
 
@@ -150,8 +150,10 @@ class TianapiController extends Controller {
   // 获取IT资讯
   async getIt() {
     const { ctx } = this;
+    // 解构参数
+    const { word, page, pageSize } = ctx.request.query;
 
-    await this.service.tianapi._getIt().then(data => {
+    await this.service.tianapi._getIt({ word, page, pageSize }).then(data => {
       ctx.body = data.data;
     }).catch(() => {
       ctx.body = {
@@ -164,8 +166,10 @@ class TianapiController extends Controller {
   // 获取互联网资讯
   async getInternet() {
     const { ctx } = this;
+    // 解构参数
+    const { word, page, pageSize } = ctx.request.query;
 
-    await this.service.tianapi._getInternet().then(data => {
+    await this.service.tianapi._getInternet({ word, page, pageSize }).then(data => {
       ctx.body = data.data;
     }).catch(() => {
       ctx.body = {
