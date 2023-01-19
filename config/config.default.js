@@ -72,7 +72,11 @@ module.exports = appInfo => {
     pageUrl: '/404.html',
   };
 
+  // 默认自己处于反向代理
   config.proxy = true;
+
+  // 配置前置的反向代理数量
+  config.maxIpsCount = 1;
 
   // add your user config here
   const userConfig = {
