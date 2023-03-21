@@ -4,7 +4,7 @@
  * @Author: WangPeng
  * @Date: 2022-07-06 11:39:35
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-11-15 16:57:57
+ * @LastEditTime: 2023-03-20 15:58:59
  */
 'use strict';
 
@@ -359,7 +359,7 @@ class UserController extends Controller {
       const isEdit = await ctx.service.user._putUserDetails(obj);
 
       if (isEdit) {
-        this.service.redis.delKey('user');
+        this.service.redis.delKeys('user');
         ctx.body = {
           code: 200,
           msg: '用户详情数据修改成功',
