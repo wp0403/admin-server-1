@@ -4,7 +4,7 @@
  * @Author: 王鹏
  * @Date: 2022-04-08 23:05:36
  * @LastEditors: WangPeng
- * @LastEditTime: 2022-10-26 18:28:42
+ * @LastEditTime: 2023-03-23 15:50:34
  */
 'use strict';
 
@@ -16,7 +16,8 @@ module.exports = {
   // }
   security: {
     // eslint-disable-next-line eggache/no-unexpected-plugin-keys
-    csrf: false,
+    csrf: true,
+    package: 'egg-cors',
   },
   mysql: {
     enable: true,
