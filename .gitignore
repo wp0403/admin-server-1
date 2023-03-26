@@ -14,4 +14,4 @@ typings/
 .nyc_output/
 .travis.yml
 appveyor.yml
-/config/config.default.js
+config/config.default.js
